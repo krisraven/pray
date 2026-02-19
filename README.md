@@ -131,7 +131,15 @@ All Bible quotes are taken from standard Bible translations and contain 60 inspi
 
 ## License
 
-Feel free to use and modify this tool as needed.
+This software is provided under a **Commercial Software License Agreement**.
+
+**Personal Use:** You may use this software for personal, non-commercial purposes.
+
+**Commercial Use:** For commercial distribution, resale, or bundling, a commercial license is required.
+
+See the [LICENSE](LICENSE) file for complete terms and conditions.
+
+For commercial licensing inquiries, please contact the publisher.
 
 ## Contributing
 

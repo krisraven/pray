@@ -36,6 +36,24 @@ go build -o pray main.go
 ./pray
 ```
 
+### Quick Install (Unix/Linux/macOS)
+
+Use the provided installation script:
+```bash
+./install.sh                    # Install to current directory
+./install.sh --global           # Install to /usr/local/bin (sudo required)
+./install.sh -d ~/bin           # Install to custom directory
+```
+
+### Quick Install (Windows)
+
+Use the provided batch installer:
+```cmd
+install.bat                     # Install to current directory
+install.bat --global            # Install to Program Files (admin required)
+install.bat -d C:\Tools         # Install to custom directory
+```
+
 ## Cross-Platform Builds
 
 To build executables for multiple platforms (Windows, macOS, Linux) and architectures (x86, ARM, etc.), use the provided build script:
@@ -68,6 +86,33 @@ To build executables for multiple platforms (Windows, macOS, Linux) and architec
 - `linux-arm64` - Linux ARM64
 
 Binaries are organized in the `build/` directory with the `quotes.json` file included in each folder.
+
+## Automated Releases
+
+This project uses **GitHub Actions** to automatically build and release executables for all platforms whenever a new version tag is pushed.
+
+### Creating a Release
+
+1. **Create a tag** with semantic versioning:
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+2. **GitHub Actions automatically:**
+   - Builds for all 9 platform/architecture combinations
+   - Creates platform-specific archives (`.zip` for Windows, `.tar.gz` for Unix)
+   - Publishes a GitHub Release with all binaries
+
+3. **Users can download** pre-built executables from the [Releases](https://github.com/krisraven/pray/releases) page
+
+### Release Process
+
+- **Trigger:** Push a git tag starting with `v` (e.g., `v1.0.0`, `v1.1.0`)
+- **Build Time:** ~5-10 minutes total
+- **Outputs:** Pre-compiled binaries ready for distribution
+
+For detailed information, see [.github/workflows/README.md](.github/workflows/README.md).
 
 ## Usage
 
@@ -111,18 +156,38 @@ Tests verify:
 - Quote data structure integrity
 - Proper unmarshaling of quote data
 
+## Distribution & Packaging
+
+For comprehensive information on distributing and selling the Pray CLI tool, see [DISTRIBUTION.md](DISTRIBUTION.md).
+
+**Key distribution features:**
+- Automated multi-platform builds via GitHub Actions
+- Universal installation scripts for Unix and Windows
+- Pre-built binaries for all platforms
+- Support for Gumroad, Itch.io, package managers, and more
+- Pricing models and licensing strategies
+
 ## Project Structure
 
 ```
 pray/
-├── main.go           # Main program logic
-├── main_test.go      # Unit tests
-├── quotes.json       # Bible quotes database
-├── go.mod            # Go module definition
-├── build.sh          # Cross-platform build script
-├── Makefile          # Alternative build automation
-├── .gitignore        # Git ignore rules
-└── README.md         # This file
+├── main.go                          # Main program logic
+├── main_test.go                     # Unit tests
+├── quotes.json                      # Bible quotes database
+├── go.mod                           # Go module definition
+├── build.sh                         # Cross-platform build script
+├── Makefile                         # Alternative build automation
+├── install.sh                       # Universal Unix installer
+├── install.bat                      # Windows batch installer
+├── .gitignore                       # Git ignore rules
+├── LICENSE                          # Commercial software license
+├── COMMERCIAL_LICENSE.md            # Licensing strategy guide
+├── DISTRIBUTION.md                  # Distribution & packaging guide
+├── README.md                        # This file
+└── .github/
+    └── workflows/
+        ├── build-release.yml        # GitHub Actions workflow
+        └── README.md                # Workflow documentation
 ```
 
 ## Quote Sources

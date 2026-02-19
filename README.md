@@ -36,6 +36,39 @@ go build -o pray main.go
 ./pray
 ```
 
+## Cross-Platform Builds
+
+To build executables for multiple platforms (Windows, macOS, Linux) and architectures (x86, ARM, etc.), use the provided build script:
+
+```bash
+# Build for all platforms
+./build.sh all
+
+# Build for a specific platform
+./build.sh linux-amd64
+./build.sh macos-arm64
+./build.sh windows-amd64
+
+# Build for your current OS
+./build.sh current
+
+# Clean build artifacts
+./build.sh clean
+```
+
+**Supported targets:**
+- `windows-amd64` - Windows 64-bit
+- `windows-386` - Windows 32-bit
+- `windows-arm64` - Windows ARM64
+- `macos-amd64` - macOS Intel (10.12+)
+- `macos-arm64` - macOS Apple Silicon (M1+)
+- `linux-amd64` - Linux 64-bit
+- `linux-386` - Linux 32-bit
+- `linux-arm` - Linux ARM (32-bit)
+- `linux-arm64` - Linux ARM64
+
+Binaries are organized in the `build/` directory with the `quotes.json` file included in each folder.
+
 ## Usage
 
 Simply type the command:
@@ -86,6 +119,8 @@ pray/
 ├── main_test.go      # Unit tests
 ├── quotes.json       # Bible quotes database
 ├── go.mod            # Go module definition
+├── build.sh          # Cross-platform build script
+├── Makefile          # Alternative build automation
 ├── .gitignore        # Git ignore rules
 └── README.md         # This file
 ```

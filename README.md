@@ -69,6 +69,33 @@ To build executables for multiple platforms (Windows, macOS, Linux) and architec
 
 Binaries are organized in the `build/` directory with the `quotes.json` file included in each folder.
 
+## Automated Releases
+
+This project uses **GitHub Actions** to automatically build and release executables for all platforms whenever a new version tag is pushed.
+
+### Creating a Release
+
+1. **Create a tag** with semantic versioning:
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+2. **GitHub Actions automatically:**
+   - Builds for all 9 platform/architecture combinations
+   - Creates platform-specific archives (`.zip` for Windows, `.tar.gz` for Unix)
+   - Publishes a GitHub Release with all binaries
+
+3. **Users can download** pre-built executables from the [Releases](https://github.com/krisraven/pray/releases) page
+
+### Release Process
+
+- **Trigger:** Push a git tag starting with `v` (e.g., `v1.0.0`, `v1.1.0`)
+- **Build Time:** ~5-10 minutes total
+- **Outputs:** Pre-compiled binaries ready for distribution
+
+For detailed information, see [.github/workflows/README.md](.github/workflows/README.md).
+
 ## Usage
 
 Simply type the command:
@@ -115,14 +142,20 @@ Tests verify:
 
 ```
 pray/
-├── main.go           # Main program logic
-├── main_test.go      # Unit tests
-├── quotes.json       # Bible quotes database
-├── go.mod            # Go module definition
-├── build.sh          # Cross-platform build script
-├── Makefile          # Alternative build automation
-├── .gitignore        # Git ignore rules
-└── README.md         # This file
+├── main.go                          # Main program logic
+├── main_test.go                     # Unit tests
+├── quotes.json                      # Bible quotes database
+├── go.mod                           # Go module definition
+├── build.sh                         # Cross-platform build script
+├── Makefile                         # Alternative build automation
+├── .gitignore                       # Git ignore rules
+├── LICENSE                          # Commercial software license
+├── COMMERCIAL_LICENSE.md            # Licensing strategy guide
+├── README.md                        # This file
+└── .github/
+    └── workflows/
+        ├── build-release.yml        # GitHub Actions workflow
+        └── README.md                # Workflow documentation
 ```
 
 ## Quote Sources

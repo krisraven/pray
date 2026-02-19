@@ -36,6 +36,24 @@ go build -o pray main.go
 ./pray
 ```
 
+### Quick Install (Unix/Linux/macOS)
+
+Use the provided installation script:
+```bash
+./install.sh                    # Install to current directory
+./install.sh --global           # Install to /usr/local/bin (sudo required)
+./install.sh -d ~/bin           # Install to custom directory
+```
+
+### Quick Install (Windows)
+
+Use the provided batch installer:
+```cmd
+install.bat                     # Install to current directory
+install.bat --global            # Install to Program Files (admin required)
+install.bat -d C:\Tools         # Install to custom directory
+```
+
 ## Cross-Platform Builds
 
 To build executables for multiple platforms (Windows, macOS, Linux) and architectures (x86, ARM, etc.), use the provided build script:
@@ -138,6 +156,17 @@ Tests verify:
 - Quote data structure integrity
 - Proper unmarshaling of quote data
 
+## Distribution & Packaging
+
+For comprehensive information on distributing and selling the Pray CLI tool, see [DISTRIBUTION.md](DISTRIBUTION.md).
+
+**Key distribution features:**
+- Automated multi-platform builds via GitHub Actions
+- Universal installation scripts for Unix and Windows
+- Pre-built binaries for all platforms
+- Support for Gumroad, Itch.io, package managers, and more
+- Pricing models and licensing strategies
+
 ## Project Structure
 
 ```
@@ -148,9 +177,12 @@ pray/
 ├── go.mod                           # Go module definition
 ├── build.sh                         # Cross-platform build script
 ├── Makefile                         # Alternative build automation
+├── install.sh                       # Universal Unix installer
+├── install.bat                      # Windows batch installer
 ├── .gitignore                       # Git ignore rules
 ├── LICENSE                          # Commercial software license
 ├── COMMERCIAL_LICENSE.md            # Licensing strategy guide
+├── DISTRIBUTION.md                  # Distribution & packaging guide
 ├── README.md                        # This file
 └── .github/
     └── workflows/

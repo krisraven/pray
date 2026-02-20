@@ -85,7 +85,7 @@ To build executables for multiple platforms (Windows, macOS, Linux) and architec
 - `linux-arm` - Linux ARM (32-bit)
 - `linux-arm64` - Linux ARM64
 
-Binaries are organized in the `build/` directory with the `quotes.json` file included in each folder.
+Binaries are organized in the `build/` directory. The quotes are fetched dynamically from the CDN, so no bundled data files are needed.
 
 ## Automated Releases
 
@@ -139,10 +139,15 @@ You can add more quotes to the `quotes.json` file. Each quote should follow this
 }
 ```
 
-Then rebuild:
+**No rebuild needed!** The quotes are fetched from the CDN, so users automatically get the updated quotes when they run the tool. Just commit and push your changes to the repository:
+
 ```bash
-go build -o pray main.go
+git add quotes.json
+git commit -m "Add new quotes"
+git push origin main
 ```
+
+The CLI will fetch the latest quotes from jsDelivr CDN on the next run.
 
 ## Testing
 

@@ -61,7 +61,6 @@ jobs:
         run: |
           mkdir -p build/pray-${{ matrix.os }}-${{ matrix.arch }}
           go build -o build/pray-${{ matrix.os }}-${{ matrix.arch }}/pray${{ matrix.os == 'windows' && '.exe' || '' }} main.go
-          cp quotes.json build/pray-${{ matrix.os }}-${{ matrix.arch }}/
 
       - name: Create archive (Unix)
         if: matrix.os != 'windows'

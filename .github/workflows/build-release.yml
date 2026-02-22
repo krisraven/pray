@@ -1,162 +1,166 @@
 name: Build and Release
 
 on:
-  push:
-    tags:
-      - 'v*'
+    push:
+        tags:
+            - "v*"
+
+permissions:
+    contents: write
 
 jobs:
-  build:
-    name: Build ${{ matrix.os }}-${{ matrix.arch }}
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      matrix:
-        include:
-          # Windows
-          - os: windows
-            arch: amd64
-            runner: windows-latest
-          - os: windows
-            arch: 386
-            runner: windows-latest
-          - os: windows
-            arch: arm64
-            runner: windows-latest
+    build:
+        name: Build ${{ matrix.os }}-${{ matrix.arch }}
+        runs-on: ${{ matrix.runner }}
+        strategy:
+            matrix:
+                include:
+                    # Windows
+                    - os: windows
+                      arch: amd64
+                      runner: windows-latest
+                    - os: windows
+                      arch: 386
+                      runner: windows-latest
+                    - os: windows
+                      arch: arm64
+                      runner: windows-latest
 
-          # macOS
-          - os: darwin
-            arch: amd64
-            runner: macos-13
-          - os: darwin
-            arch: arm64
-            runner: macos-latest
+                    # macOS
+                    - os: darwin
+                      arch: amd64
+                      runner: macos-latest
+                    - os: darwin
+                      arch: arm64
+                      runner: macos-latest
 
-          # Linux
-          - os: linux
-            arch: amd64
-            runner: ubuntu-latest
-          - os: linux
-            arch: 386
-            runner: ubuntu-latest
-          - os: linux
-            arch: arm
-            runner: ubuntu-latest
-          - os: linux
-            arch: arm64
-            runner: ubuntu-latest
+                    # Linux
+                    - os: linux
+                      arch: amd64
+                      runner: ubuntu-latest
+                    - os: linux
+                      arch: 386
+                      runner: ubuntu-latest
+                    - os: linux
+                      arch: arm
+                      runner: ubuntu-latest
+                    - os: linux
+                      arch: arm64
+                      runner: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
+            - name: Set up Go
+              uses: actions/setup-go@v4
+              with:
+                  go-version: "1.21"
+                  cache: false
 
-      - name: Build
-        env:
-          GOOS: ${{ matrix.os }}
-          GOARCH: ${{ matrix.arch }}
-        run: |
-          mkdir -p build/pray-${{ matrix.os }}-${{ matrix.arch }}
-          go build -o build/pray-${{ matrix.os }}-${{ matrix.arch }}/pray${{ matrix.os == 'windows' && '.exe' || '' }} main.go
+            - name: Build
+              env:
+                  GOOS: ${{ matrix.os }}
+                  GOARCH: ${{ matrix.arch }}
+              run: |
+                  mkdir -p build/pray-${{ matrix.os }}-${{ matrix.arch }}
+                  go build -o build/pray-${{ matrix.os }}-${{ matrix.arch }}/pray${{ matrix.os == 'windows' && '.exe' || '' }} main.go
 
-      - name: Create archive (Unix)
-        if: matrix.os != 'windows'
-        run: |
-          cd build
-          tar -czf pray-${{ matrix.os }}-${{ matrix.arch }}.tar.gz pray-${{ matrix.os }}-${{ matrix.arch }}/
-          cd ..
+            - name: Create archive (Unix)
+              if: matrix.os != 'windows'
+              run: |
+                  cd build
+                  tar -czf pray-${{ matrix.os }}-${{ matrix.arch }}.tar.gz pray-${{ matrix.os }}-${{ matrix.arch }}/
+                  cd ..
 
-      - name: Create archive (Windows)
-        if: matrix.os == 'windows'
-        run: |
-          cd build
-          powershell -Command "Compress-Archive -Path pray-${{ matrix.os }}-${{ matrix.arch }} -DestinationPath pray-${{ matrix.os }}-${{ matrix.arch }}.zip"
-          cd ..
+            - name: Create archive (Windows)
+              if: matrix.os == 'windows'
+              run: |
+                  cd build
+                  powershell -Command "Compress-Archive -Path pray-${{ matrix.os }}-${{ matrix.arch }} -DestinationPath pray-${{ matrix.os }}-${{ matrix.arch }}.zip"
+                  cd ..
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: pray-${{ matrix.os }}-${{ matrix.arch }}
-          path: build/pray-${{ matrix.os }}-${{ matrix.arch }}/
+            - name: Upload artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: pray-${{ matrix.os }}-${{ matrix.arch }}
+                  path: build/pray-${{ matrix.os }}-${{ matrix.arch }}/
 
-  release:
-    name: Create Release
-    needs: build
-    runs-on: ubuntu-latest
+    release:
+        name: Create Release
+        needs: build
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-      - name: Download all artifacts
-        uses: actions/download-artifact@v3
-        with:
-          path: release-artifacts
+            - name: Download all artifacts
+              uses: actions/download-artifact@v4
+              with:
+                  path: release-artifacts
 
-      - name: Create archives
-        run: |
-          cd release-artifacts
+            - name: Create archives
+              run: |
+                  cd release-artifacts
 
-          # Create tar.gz for Unix platforms
-          tar -czf pray-darwin-amd64.tar.gz pray-darwin-amd64/
-          tar -czf pray-darwin-arm64.tar.gz pray-darwin-arm64/
-          tar -czf pray-linux-amd64.tar.gz pray-linux-amd64/
-          tar -czf pray-linux-386.tar.gz pray-linux-386/
-          tar -czf pray-linux-arm.tar.gz pray-linux-arm/
-          tar -czf pray-linux-arm64.tar.gz pray-linux-arm64/
+                  # Create tar.gz for Unix platforms
+                  tar -czf pray-darwin-amd64.tar.gz pray-darwin-amd64/
+                  tar -czf pray-darwin-arm64.tar.gz pray-darwin-arm64/
+                  tar -czf pray-linux-amd64.tar.gz pray-linux-amd64/
+                  tar -czf pray-linux-386.tar.gz pray-linux-386/
+                  tar -czf pray-linux-arm.tar.gz pray-linux-arm/
+                  tar -czf pray-linux-arm64.tar.gz pray-linux-arm64/
 
-          # Create zip for Windows platforms
-          apt-get update && apt-get install -y zip
-          zip -r pray-windows-amd64.zip pray-windows-amd64/
-          zip -r pray-windows-386.zip pray-windows-386/
-          zip -r pray-windows-arm64.zip pray-windows-arm64/
+                  # Create zip for Windows platforms
+                  apt-get update && apt-get install -y zip
+                  zip -r pray-windows-amd64.zip pray-windows-amd64/
+                  zip -r pray-windows-386.zip pray-windows-386/
+                  zip -r pray-windows-arm64.zip pray-windows-arm64/
 
-          cd ..
+                  cd ..
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            release-artifacts/pray-windows-amd64.zip
-            release-artifacts/pray-windows-386.zip
-            release-artifacts/pray-windows-arm64.zip
-            release-artifacts/pray-darwin-amd64.tar.gz
-            release-artifacts/pray-darwin-arm64.tar.gz
-            release-artifacts/pray-linux-amd64.tar.gz
-            release-artifacts/pray-linux-386.tar.gz
-            release-artifacts/pray-linux-arm.tar.gz
-            release-artifacts/pray-linux-arm64.tar.gz
-          body: |
-            ## Pray - Bible Quote CLI Tool
+            - name: Create Release
+              uses: softprops/action-gh-release@v1
+              with:
+                  files: |
+                      release-artifacts/pray-windows-amd64.zip
+                      release-artifacts/pray-windows-386.zip
+                      release-artifacts/pray-windows-arm64.zip
+                      release-artifacts/pray-darwin-amd64.tar.gz
+                      release-artifacts/pray-darwin-arm64.tar.gz
+                      release-artifacts/pray-linux-amd64.tar.gz
+                      release-artifacts/pray-linux-386.tar.gz
+                      release-artifacts/pray-linux-arm.tar.gz
+                      release-artifacts/pray-linux-arm64.tar.gz
+                  body: |
+                      ## Pray - Bible Quote CLI Tool
 
-            Automated release build for ${{ github.ref_name }}
+                      Automated release build for ${{ github.ref_name }}
 
-            ### Downloads
+                      ### Downloads
 
-            **Windows:**
-            - `pray-windows-amd64.zip` - Windows 64-bit (Intel)
-            - `pray-windows-386.zip` - Windows 32-bit
-            - `pray-windows-arm64.zip` - Windows ARM64
+                      **Windows:**
+                      - `pray-windows-amd64.zip` - Windows 64-bit (Intel)
+                      - `pray-windows-386.zip` - Windows 32-bit
+                      - `pray-windows-arm64.zip` - Windows ARM64
 
-            **macOS:**
-            - `pray-darwin-amd64.tar.gz` - macOS Intel (10.12+)
-            - `pray-darwin-arm64.tar.gz` - macOS Apple Silicon (M1+)
+                      **macOS:**
+                      - `pray-darwin-amd64.tar.gz` - macOS Intel (10.12+)
+                      - `pray-darwin-arm64.tar.gz` - macOS Apple Silicon (M1+)
 
-            **Linux:**
-            - `pray-linux-amd64.tar.gz` - Linux 64-bit
-            - `pray-linux-386.tar.gz` - Linux 32-bit
-            - `pray-linux-arm.tar.gz` - Linux ARM
-            - `pray-linux-arm64.tar.gz` - Linux ARM64
+                      **Linux:**
+                      - `pray-linux-amd64.tar.gz` - Linux 64-bit
+                      - `pray-linux-386.tar.gz` - Linux 32-bit
+                      - `pray-linux-arm.tar.gz` - Linux ARM
+                      - `pray-linux-arm64.tar.gz` - Linux ARM64
 
-            ### Installation
+                      ### Installation
 
-            Extract the appropriate archive for your system and run the `pray` executable.
+                      Extract the appropriate archive for your system and run the `pray` executable.
 
-            For more information, visit https://github.com/krisraven/pray
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                      For more information, visit https://github.com/krisraven/pray
+                  draft: false
+                  prerelease: false
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

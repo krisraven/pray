@@ -126,35 +126,28 @@ main() {
 
     # Download binary
     echo -e "\n${BLUE}Downloading binary...${NC}"
-    local binary_url="https://github.com/krisraven/pray/releases/download/latest/pray-${PLATFORM}"
+    local binary_url="https://github.com/krisraven/pray/releases/download/v1.0.0/pray-${PLATFORM}.tar.gz"
 
+    local tmp_archive=$(mktemp /tmp/pray-XXXXXX.tar.gz)
+
+    curl -fsSL -o "$tmp_archive" "$binary_url"
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}✗ Failed to download archive${NC}"
+        rm -f "$tmp_archive"
+        exit 1
+    fi
+
+    # Extract archive
+    echo -e "${BLUE}Extracting...${NC}"
     if [ "$INSTALL_GLOBAL" = true ]; then
-        sudo curl -fsSL -o "$INSTALL_DIR/$BINARY_NAME" "$binary_url"
+        sudo tar -xzf "$tmp_archive" -C "$INSTALL_DIR"
         sudo chmod +x "$INSTALL_DIR/$BINARY_NAME"
     else
-        curl -fsSL -o "$INSTALL_DIR/$BINARY_NAME" "$binary_url"
+        tar -xzf "$tmp_archive" -C "$INSTALL_DIR"
         chmod +x "$INSTALL_DIR/$BINARY_NAME"
     fi
 
-    if [ $? -ne 0 ]; then
-        echo -e "${RED}✗ Failed to download binary${NC}"
-        exit 1
-    fi
-
-    # Download quotes.json
-    echo -e "${BLUE}Downloading quotes...${NC}"
-    local quotes_url="https://raw.githubusercontent.com/krisraven/pray/main/quotes.json"
-
-    if [ "$INSTALL_GLOBAL" = true ]; then
-        sudo curl -fsSL -o "$INSTALL_DIR/$QUOTES_FILE" "$quotes_url"
-    else
-        curl -fsSL -o "$INSTALL_DIR/$QUOTES_FILE" "$quotes_url"
-    fi
-
-    if [ $? -ne 0 ]; then
-        echo -e "${RED}✗ Failed to download quotes${NC}"
-        exit 1
-    fi
+    rm -f "$tmp_archive"
 
     # Verify installation
     echo -e "\n${BLUE}Verifying installation...${NC}"

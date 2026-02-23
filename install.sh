@@ -124,9 +124,18 @@ main() {
         fi
     fi
 
+    # Get latest release version
+    echo -e "\n${BLUE}Fetching latest version...${NC}"
+    local latest_version=$(curl -fsSL -o /dev/null -w "%{redirect_url}" "https://github.com/krisraven/pray/releases/latest" | grep -oP '[^/]+$')
+    if [ -z "$latest_version" ]; then
+        echo -e "${RED}✗ Failed to determine latest version${NC}"
+        exit 1
+    fi
+    echo -e "Latest version: ${latest_version}"
+
     # Download binary
     echo -e "\n${BLUE}Downloading binary...${NC}"
-    local binary_url="https://github.com/krisraven/pray/releases/download/v1.0.0/pray-${PLATFORM}.tar.gz"
+    local binary_url="https://github.com/krisraven/pray/releases/download/${latest_version}/pray-${PLATFORM}.tar.gz"
 
     local tmp_archive=$(mktemp /tmp/pray-XXXXXX.tar.gz)
 

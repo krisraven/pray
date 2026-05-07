@@ -35,57 +35,57 @@ build:
 build-windows-amd64:
 	@mkdir -p $(BUILD_DIR)/pray-windows-amd64
 	GOOS=windows GOARCH=amd64 go build $(LDFLAGS) -o $(BUILD_DIR)/pray-windows-amd64/pray.exe main.go
-	cp quotes.json $(BUILD_DIR)/pray-windows-amd64/
+	cp quotes.json quotes-premium.json $(BUILD_DIR)/pray-windows-amd64/
 	@echo "Built: $(BUILD_DIR)/pray-windows-amd64/"
 
 build-windows-386:
 	@mkdir -p $(BUILD_DIR)/pray-windows-386
 	GOOS=windows GOARCH=386 go build $(LDFLAGS) -o $(BUILD_DIR)/pray-windows-386/pray.exe main.go
-	cp quotes.json $(BUILD_DIR)/pray-windows-386/
+	cp quotes.json quotes-premium.json $(BUILD_DIR)/pray-windows-386/
 	@echo "Built: $(BUILD_DIR)/pray-windows-386/"
 
 build-windows-arm64:
 	@mkdir -p $(BUILD_DIR)/pray-windows-arm64
 	GOOS=windows GOARCH=arm64 go build $(LDFLAGS) -o $(BUILD_DIR)/pray-windows-arm64/pray.exe main.go
-	cp quotes.json $(BUILD_DIR)/pray-windows-arm64/
+	cp quotes.json quotes-premium.json $(BUILD_DIR)/pray-windows-arm64/
 	@echo "Built: $(BUILD_DIR)/pray-windows-arm64/"
 
 # macOS builds
 build-macos-amd64:
 	@mkdir -p $(BUILD_DIR)/pray-macos-amd64
 	GOOS=darwin GOARCH=amd64 go build $(LDFLAGS) -o $(BUILD_DIR)/pray-macos-amd64/pray main.go
-	cp quotes.json $(BUILD_DIR)/pray-macos-amd64/
+	cp quotes.json quotes-premium.json $(BUILD_DIR)/pray-macos-amd64/
 	@echo "Built: $(BUILD_DIR)/pray-macos-amd64/"
 
 build-macos-arm64:
 	@mkdir -p $(BUILD_DIR)/pray-macos-arm64
 	GOOS=darwin GOARCH=arm64 go build $(LDFLAGS) -o $(BUILD_DIR)/pray-macos-arm64/pray main.go
-	cp quotes.json $(BUILD_DIR)/pray-macos-arm64/
+	cp quotes.json quotes-premium.json $(BUILD_DIR)/pray-macos-arm64/
 	@echo "Built: $(BUILD_DIR)/pray-macos-arm64/"
 
 # Linux builds
 build-linux-amd64:
 	@mkdir -p $(BUILD_DIR)/pray-linux-amd64
 	GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -o $(BUILD_DIR)/pray-linux-amd64/pray main.go
-	cp quotes.json $(BUILD_DIR)/pray-linux-amd64/
+	cp quotes.json quotes-premium.json $(BUILD_DIR)/pray-linux-amd64/
 	@echo "Built: $(BUILD_DIR)/pray-linux-amd64/"
 
 build-linux-386:
 	@mkdir -p $(BUILD_DIR)/pray-linux-386
 	GOOS=linux GOARCH=386 go build $(LDFLAGS) -o $(BUILD_DIR)/pray-linux-386/pray main.go
-	cp quotes.json $(BUILD_DIR)/pray-linux-386/
+	cp quotes.json quotes-premium.json $(BUILD_DIR)/pray-linux-386/
 	@echo "Built: $(BUILD_DIR)/pray-linux-386/"
 
 build-linux-arm:
 	@mkdir -p $(BUILD_DIR)/pray-linux-arm
 	GOOS=linux GOARCH=arm go build $(LDFLAGS) -o $(BUILD_DIR)/pray-linux-arm/pray main.go
-	cp quotes.json $(BUILD_DIR)/pray-linux-arm/
+	cp quotes.json quotes-premium.json $(BUILD_DIR)/pray-linux-arm/
 	@echo "Built: $(BUILD_DIR)/pray-linux-arm/"
 
 build-linux-arm64:
 	@mkdir -p $(BUILD_DIR)/pray-linux-arm64
 	GOOS=linux GOARCH=arm64 go build $(LDFLAGS) -o $(BUILD_DIR)/pray-linux-arm64/pray main.go
-	cp quotes.json $(BUILD_DIR)/pray-linux-arm64/
+	cp quotes.json quotes-premium.json $(BUILD_DIR)/pray-linux-arm64/
 	@echo "Built: $(BUILD_DIR)/pray-linux-arm64/"
 
 # Build all platforms

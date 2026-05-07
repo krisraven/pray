@@ -183,6 +183,27 @@ Includes:
 
 ## License Key System (Optional)
 
+## Premium Tier
+
+A premium version is available with 600 Bible quotes instead of 60.
+
+### Activating Premium
+
+After purchasing, create the license file:
+
+**Unix/Linux/macOS:**
+```bash
+mkdir -p ~/.pray && touch ~/.pray/license
+```
+
+**Windows (PowerShell):**
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.pray"
+New-Item -ItemType File "$env:USERPROFILE\.pray\license"
+```
+
+The tool automatically detects the license file on startup and loads the expanded quote set from the premium CDN. No restart or reinstall required.
+
 ### Benefits
 - Prevent unauthorized redistribution
 - Enable different feature tiers

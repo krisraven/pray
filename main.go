@@ -21,6 +21,20 @@ type QuotesData struct {
 	Quotes []Quote `json:"quotes"`
 }
 
+const (
+	freeCDN    = "https://cdn.jsdelivr.net/gh/krisraven/pray@main/quotes.json"
+	premiumCDN = "https://cdn.jsdelivr.net/gh/krisraven/pray@main/quotes-premium.json"
+)
+
+func isPremium() bool {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return false
+	}
+	info, err := os.Stat(filepath.Join(home, ".pray", "license"))
+	return err == nil && info.Size() > 0
+}
+
 func main() {
 	quotesData, err := fetchQuotes()
 	if err != nil {
@@ -31,55 +45,52 @@ func main() {
 		log.Fatal("No quotes found")
 	}
 
-	// Seed the random number generator
 	rand.Seed(time.Now().UnixNano())
+	quote := quotesData.Quotes[rand.Intn(len(quotesData.Quotes))]
 
-	// Select a random quote
-	randomIndex := rand.Intn(len(quotesData.Quotes))
-	quote := quotesData.Quotes[randomIndex]
-
-	// Print the quote
 	fmt.Println("\n" + quote.Text)
 	fmt.Println("— " + quote.Reference + "\n")
 }
 
 func fetchQuotes() (*QuotesData, error) {
-	const quotesURL = "https://cdn.jsdelivr.net/gh/krisraven/pray@main/quotes.json"
+	premium := isPremium()
 
-	resp, err := http.Get(quotesURL)
+	cdnURL := freeCDN
+	localFile := "quotes.json"
+	if premium {
+		cdnURL = premiumCDN
+		localFile = "quotes-premium.json"
+	}
+
+	resp, err := http.Get(cdnURL)
 	if err != nil {
-		// Fallback to local file if network fails
-		return loadLocalQuotes()
+		return loadLocalQuotes(localFile)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		// Fallback to local file on HTTP error
-		return loadLocalQuotes()
+		return loadLocalQuotes(localFile)
 	}
 
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return loadLocalQuotes()
+		return loadLocalQuotes(localFile)
 	}
 
 	var quotesData QuotesData
-	err = json.Unmarshal(data, &quotesData)
-	if err != nil {
-		return loadLocalQuotes()
+	if err = json.Unmarshal(data, &quotesData); err != nil {
+		return loadLocalQuotes(localFile)
 	}
 
 	return &quotesData, nil
 }
 
-func loadLocalQuotes() (*QuotesData, error) {
-	// Fallback: try to load from executable directory
+func loadLocalQuotes(filename string) (*QuotesData, error) {
 	exePath, err := os.Executable()
 	if err != nil {
 		return nil, err
 	}
-	exeDir := filepath.Dir(exePath)
-	quotesFile := filepath.Join(exeDir, "quotes.json")
+	quotesFile := filepath.Join(filepath.Dir(exePath), filename)
 
 	data, err := os.ReadFile(quotesFile)
 	if err != nil {
@@ -87,8 +98,7 @@ func loadLocalQuotes() (*QuotesData, error) {
 	}
 
 	var quotesData QuotesData
-	err = json.Unmarshal(data, &quotesData)
-	if err != nil {
+	if err = json.Unmarshal(data, &quotesData); err != nil {
 		return nil, err
 	}
 

@@ -30,6 +30,7 @@ build() {
 
     if [ $? -eq 0 ]; then
         cp quotes.json "$output_dir/"
+        cp quotes-premium.json "$output_dir/"
         echo -e "${GREEN}✓ Built: ${output_dir}/${NC}"
     else
         echo -e "✗ Build failed for ${os}/${arch}"
@@ -80,6 +81,7 @@ build_current() {
 
     if [ $? -eq 0 ]; then
         cp quotes.json "$BUILD_DIR/"
+        cp quotes-premium.json "$BUILD_DIR/"
         echo -e "${GREEN}✓ Built: ${BUILD_DIR}/pray${NC}"
     else
         echo "✗ Build failed"

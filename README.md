@@ -54,6 +54,15 @@ install.bat --global            # Install to Program Files (admin required)
 install.bat -d C:\Tools         # Install to custom directory
 ```
 
+## Premium Tier
+
+A premium version is available with 600 Bible quotes instead of 60.
+
+### Activating Premium
+
+More details to come
+
+
 ## Uninstallation
 
 ### Unix/Linux/macOS
@@ -200,6 +209,7 @@ pray/
 ├── go.mod                           # Go module definition
 ├── build.sh                         # Cross-platform build script
 ├── Makefile                         # Alternative build automation
+├── quotes-premium.json              # Premium quotes database (not distributed publicly)
 ├── install.sh                       # Universal Unix installer
 ├── install.bat                      # Windows batch installer
 ├── uninstall.sh                     # Universal Unix uninstaller

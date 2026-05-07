@@ -54,6 +54,24 @@ install.bat --global            # Install to Program Files (admin required)
 install.bat -d C:\Tools         # Install to custom directory
 ```
 
+## Uninstallation
+
+### Unix/Linux/macOS
+
+```bash
+./uninstall.sh                  # Uninstall from current directory
+./uninstall.sh --global         # Uninstall from /usr/local/bin (sudo required)
+./uninstall.sh -d ~/bin         # Uninstall from custom directory
+```
+
+### Windows
+
+```cmd
+uninstall.bat                   # Uninstall from current directory
+uninstall.bat --global          # Uninstall from Program Files (admin required)
+uninstall.bat -d C:\Tools       # Uninstall from custom directory
+```
+
 ## Cross-Platform Builds
 
 To build executables for multiple platforms (Windows, macOS, Linux) and architectures (x86, ARM, etc.), use the provided build script:
@@ -184,6 +202,8 @@ pray/
 ├── Makefile                         # Alternative build automation
 ├── install.sh                       # Universal Unix installer
 ├── install.bat                      # Windows batch installer
+├── uninstall.sh                     # Universal Unix uninstaller
+├── uninstall.bat                    # Windows batch uninstaller
 ├── .gitignore                       # Git ignore rules
 ├── LICENSE                          # Commercial software license
 ├── COMMERCIAL_LICENSE.md            # Licensing strategy guide
